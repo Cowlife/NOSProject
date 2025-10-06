@@ -1,0 +1,1 @@
+DROP SCHEMA nos_schema CASCADE;
