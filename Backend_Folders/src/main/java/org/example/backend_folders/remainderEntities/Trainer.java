@@ -18,8 +18,15 @@ public class Trainer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private UUID id;
+    private UUID nameId;
 
     @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
 }

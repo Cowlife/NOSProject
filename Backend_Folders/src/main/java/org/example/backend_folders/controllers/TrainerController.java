@@ -29,6 +29,11 @@ public class TrainerController {
         return trainerService.getPersonById(id);
     }
 
+    @GetMapping("/search/{email}")
+    public Trainer searchTrainerEmail(@PathVariable String email) {
+        return this.trainerService.findByEmail(email);
+    }
+
     @PostMapping
     public Trainer createTrainer(@RequestBody Trainer trainer) {
         return trainerService.saveTrainer(trainer);

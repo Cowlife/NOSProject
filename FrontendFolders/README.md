@@ -28,8 +28,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Installing PrimeNG
 
-Ran the following sequuence of commands to install version 18 of PrimeNG:
+Ran the following sequuence of commands to install version 18 of PrimeNG and UUID:
 * `npm install primeicons`;  
 * `npm i primeng@18.0.2-patch.1`; 
-* `npm install primeng @primeng/themes`.
+* `npm install primeng @primeng/themes`;
+* `npm install uuid`.
 

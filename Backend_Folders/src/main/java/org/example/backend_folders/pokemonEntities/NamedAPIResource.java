@@ -9,16 +9,11 @@ import lombok.*;
 @AllArgsConstructor // removing this.id = id inside constructor
 @Entity
 @Builder
-public class PokeVariableDesc {
-
+public class NamedAPIResource {
+    @Id
     private String name;
 
     private String url;
-
-    @Id
-    @Column(insertable = false, updatable = false)
-    @GeneratedValue
-    private Long pokeVar_id;
 
 
 }

@@ -1,9 +1,6 @@
 package org.example.backend_folders.pokemonEntities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,16 +17,17 @@ import java.util.List;
 @Builder
 public class Pokemon {
 
-    @OneToMany
-    private List<Ability> abilities;
-
-    private int base_experience;
-
-    @OneToMany
-    private List<PokeVariableDesc> results;
-
     @Id
-    @GeneratedValue
-    private Long id;
+    private Integer id;
+
+    private Integer order;
+
+    private boolean favorite = false;
+
+    @OneToMany
+    private List<PokemonType> types;
+
+    @OneToOne
+    private Sprites sprites;
 
 }

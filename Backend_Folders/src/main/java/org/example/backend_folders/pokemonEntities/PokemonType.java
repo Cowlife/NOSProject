@@ -1,22 +1,25 @@
 package org.example.backend_folders.pokemonEntities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.databind.util.Named;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data // getter, setter, required args constructor
 @NoArgsConstructor // removing empty constructor
 @AllArgsConstructor // removing this.id = id inside constructor
 @Entity
 @Builder
-public class Cry {
+public class PokemonType {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private Integer slot;
+
+    @OneToOne
+    private NamedAPIResource type;
 
 }

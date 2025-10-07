@@ -1,7 +1,6 @@
 package org.example.backend_folders.pokemonEntities;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,11 +12,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor // removing this.id = id inside constructor
 @Entity
 @Builder
-public class GameIndex {
+public class Sprites {
     @Id
-    @GeneratedValue
-    private Long id;
+    private Integer sprites_id;
 
-
+    private String back_default;
+    private String back_female;
+    private String back_shiny;
+    private String back_shiny_female;
+    private String front_default;
+    private String front_female;
+    private String front_shiny;
+    private String front_shiny_female;
 
 }

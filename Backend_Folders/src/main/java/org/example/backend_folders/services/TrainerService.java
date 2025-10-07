@@ -32,4 +32,8 @@ public class TrainerService {
     public void deleteTrainer(UUID id) {
         trainerRepository.deleteById(id);
     }
+
+    public Trainer findByEmail(String email) {
+        return trainerRepository.findByEmailEquals(email);
+    }
 }

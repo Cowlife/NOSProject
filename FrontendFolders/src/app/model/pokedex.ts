@@ -1,9 +1,9 @@
-import {PokeVariableDesc} from './pokeVariableDesc';
+import {NamedAPIResource} from './namedAPIResource';
 
 export interface Pokedex{
   id: number;
   count:number;
-  previous: String;
-  next: String;
-  results: PokeVariableDesc[];
+  previous: string;
+  next: string;
+  results: NamedAPIResource[];
 }

@@ -1,7 +1,24 @@
-<div class="flex-container" >
-  <div class="mb-4 p-8 flex items-center justify-center" *ngFor="let result of this.pokemon_list.results">
-    <p-card >
-      {{result.name}}
-    </p-card>
+
+
+<div style="background-color: #b6956f;">
+  <div class="flex-container" >
+    <div *ngFor="let type_category of type_categories" class="flex items-center">
+      <p-checkbox [inputId]="type_category.key" name="group" [value]="type_category" [(ngModel)]="selected_type_categories" />
+      <label [for]="type_category.key" class="ml-2"> {{ type_category.name }} </label>
+    </div>-
+    <div *ngFor="let result of this.filteredArray; let i = index">
+      <p-card>
+        <p-image [src]="image_list[i]" alt="Image" width="96" [preview]="true" />
+        {{result.name}}
+        <div>
+          <p-button [disabled]="true"  [label]="this.type_list[i][0].type.name" severity="success"/>
+          <p-button *ngIf="this.type_list[i][1]" [disabled]="true" [label]="this.type_list[i][1].type.name" severity="help" />
+        </div>
+        <p-button class="favorite-button" icon="pi pi-heart" [rounded]="true" [text]="true"/>
+      </p-card>
+    </div>
   </div>
+</div>
+<div style="margin-top: auto">
+  <p-paginator [pageLinkSize]="defaultRecords" (onPageChange)="onPageChange($event)" [first]="0" [rows]="10" [totalRecords]="record_length" [rowsPerPageOptions]="[10, 20, 30]" />
 </div>

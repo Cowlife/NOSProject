@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {Button} from 'primeng/button';
+import {PokemonService} from '../pokemon.service';
 
 @Component({
   selector: 'app-hub',
@@ -13,5 +14,7 @@ import {Button} from 'primeng/button';
   styleUrl: './hub.component.css'
 })
 export class HubComponent {
+
+  constructor(protected pokemonService: PokemonService){}
 
 }

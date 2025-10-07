@@ -1,12 +1,9 @@
-import {UUID} from 'node:crypto';
 
 export interface Trainer{
-  id: UUID,
+  id: string,
   name: string,
   email: string,
   password: string,
-  phone: string,
-  role: string,
 }
 
 export enum RoleName{

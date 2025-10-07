@@ -1,15 +1,13 @@
 package org.example.backend_folders.pokemonEntities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data // getter, setter, required args constructor
 @NoArgsConstructor // removing empty constructor
@@ -17,17 +15,17 @@ import java.util.List;
 @Entity
 @Builder
 public class Pokedex {
-    @Id
-    @GeneratedValue
-    private Long id;
 
     private int count;
     private String previous;
     private String next;
 
     @OneToMany
-    private List<PokeVariableDesc> results;
+    private List<NamedAPIResource> results;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer pokedex_id;
 
 
 }

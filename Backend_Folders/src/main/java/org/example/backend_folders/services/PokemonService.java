@@ -1,8 +1,9 @@
 package org.example.backend_folders.services;
 
-import org.example.backend_folders.pokemonEntities.PokeVariableDesc;
+import org.example.backend_folders.pokemonEntities.NamedAPIResource;
 import org.example.backend_folders.pokemonEntities.Pokedex;
 
+import org.example.backend_folders.pokemonEntities.Pokemon;
 import org.example.backend_folders.repositories.PokeVariableDescRepository;
 
 import org.springframework.http.ResponseEntity;
@@ -27,21 +28,28 @@ public class PokemonService {
         return forEntity.getBody();
     }
 
-    void getPokemonElementsByName(){
-
+    public Pokemon getPokemonElementsByName(String pokemon_name){
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Pokemon> forEntity = restTemplate.getForEntity(uri + "pokemon/" + pokemon_name, Pokemon.class);
+        return forEntity.getBody();
     }
 
-    public Optional<PokeVariableDesc> getPokemonById(UUID id) {
+    public Optional<NamedAPIResource> getPokemonById(String id) {
         return pokeVariableDescRepository.findById(id);
     }
 
-    public PokeVariableDesc savePokemon(PokeVariableDesc pokemon) {
+    public NamedAPIResource savePokemon(NamedAPIResource pokemon) {
         return pokeVariableDescRepository.save(pokemon);
     }
 
-    public void deletePokemon(UUID id) {
+    public void deletePokemon(String id) {
         pokeVariableDescRepository.deleteById(id);
     }
 
 
+    public Pokedex getAllTypes() {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Pokedex> forEntity = restTemplate.getForEntity(uri + "type", Pokedex.class);
+        return forEntity.getBody();
+    }
 }

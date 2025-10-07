@@ -1,8 +1,9 @@
 package org.example.backend_folders.controllers;
 
 
-import org.example.backend_folders.pokemonEntities.PokeVariableDesc;
+import org.example.backend_folders.pokemonEntities.NamedAPIResource;
 import org.example.backend_folders.pokemonEntities.Pokedex;
+import org.example.backend_folders.pokemonEntities.Pokemon;
 import org.example.backend_folders.services.PokemonService;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,18 +27,28 @@ public class PokemonController {
         return pokemonService.getAllPokemon();
     }
 
-    @GetMapping("/{id}")
-    public Optional<PokeVariableDesc> getPokemonById(@PathVariable UUID id) {
+    @GetMapping("/name/{name}")
+    public Pokemon getPokemonByName(@PathVariable String name) {
+        return pokemonService.getPokemonElementsByName(name);
+    }
+
+    @GetMapping("/id/{id}")
+    public Optional<NamedAPIResource> getPokemonById(@PathVariable String id) {
         return pokemonService.getPokemonById(id);
     }
 
+    @GetMapping("/types")
+    public Pokedex getAllTypes(){
+        return pokemonService.getAllTypes();
+    }
+
     @PostMapping
-    public PokeVariableDesc createPokemon(@RequestBody PokeVariableDesc pokemon) {
+    public NamedAPIResource createPokemon(@RequestBody NamedAPIResource pokemon) {
         return pokemonService.savePokemon(pokemon);
     }
 
     @DeleteMapping("/{id}")
-    public void deletePokemon(@PathVariable UUID id) {
+    public void deletePokemon(@PathVariable String id) {
         pokemonService.deletePokemon(id);
     }
 

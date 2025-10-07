@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, UUID> {
-
+    Trainer findByEmailEquals(String email);
 }
