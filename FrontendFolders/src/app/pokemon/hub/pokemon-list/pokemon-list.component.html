@@ -1,18 +1,33 @@
 
 
 <div style="background-color: #b6956f;">
+  <p-floatlabel variant="on" style="display: flex">
+    <input [disabled]="is_being_filtered" pInputText id="on_label" [(ngModel)]="search_value" autocomplete="off" />
+    <label style="margin: auto" for="on_label">Name To Search</label>
+    <div>
+      <p-splitbutton (onClick)="orderValues()" [model]="items"
+                     [icon]="this.orderArray[this.orderIconIndex]"
+                     dropdownIcon="pi pi-search" [disabled]="is_being_filtered"/>
+      <p-button (onClick)="filterName('', true)" icon="pi pi-filter-slash" [rounded]="true" [disabled]="!is_being_filtered"/>
+    </div>
+  </p-floatlabel>
+
   <div class="flex-container" >
-    <div *ngFor="let type_category of type_categories" class="flex items-center">
-      <p-checkbox [inputId]="type_category.key" name="group" [value]="type_category" [(ngModel)]="selected_type_categories" />
-      <label [for]="type_category.key" class="ml-2"> {{ type_category.name }} </label>
-    </div>-
-    <div *ngFor="let result of this.filteredArray; let i = index">
+    <div *ngFor="let type_category of type_categories.results" class="checkbox_ui">
+      <p-checkbox [inputId]="type_category.url" name="group"  [value]="type_category" [(ngModel)]="selected_type_categories"
+                  (onChange)="matchTypeSearch($event.checked)" />
+      <label [for]="type_category.url" class="ml-2"> {{ type_category.name }} </label>
+    </div>
+
+    <div *ngFor="let result of this.pokemon_item_select; let i = index">
       <p-card>
-        <p-image [src]="image_list[i]" alt="Image" width="96" [preview]="true" />
-        {{result.name}}
+        <p-button [outlined]="true">
+          <img [src]="result.label" alt="Image" width="96">
+        </p-button>
+        {{result.title}}
         <div>
-          <p-button [disabled]="true"  [label]="this.type_list[i][0].type.name" severity="success"/>
-          <p-button *ngIf="this.type_list[i][1]" [disabled]="true" [label]="this.type_list[i][1].type.name" severity="help" />
+          <p-button class="button-type1-ui" [disabled]="true"  [label]="result.value"/>
+          <p-button class="button-type2-ui" *ngIf="result.secValue != '' " [disabled]="true" [label]="result.secValue"/>
         </div>
         <p-button class="favorite-button" icon="pi pi-heart" [rounded]="true" [text]="true"/>
       </p-card>

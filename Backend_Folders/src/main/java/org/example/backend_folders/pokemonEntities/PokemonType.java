@@ -19,7 +19,11 @@ public class PokemonType {
     @Id
     private Integer slot;
 
+    // in case for move type fetching
     @OneToOne
     private NamedAPIResource type;
 
+    // in case for pokemon type fetching
+    @OneToOne
+    private NamedAPIResource pokemon;
 }

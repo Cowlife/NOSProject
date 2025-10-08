@@ -32,3 +32,16 @@ p-image{
 }
 
 
+.button-type1-ui{
+  margin-right: 5px;
+}
+
+.button-type2-ui{
+  margin-left: 5px;
+}
+
+.checkbox_ui {
+  margin: 5px 20px 0 !important;
+  height: 30px !important;
+}
+

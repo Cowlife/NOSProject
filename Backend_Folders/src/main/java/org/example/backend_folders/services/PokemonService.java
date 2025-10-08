@@ -1,9 +1,7 @@
 package org.example.backend_folders.services;
 
-import org.example.backend_folders.pokemonEntities.NamedAPIResource;
-import org.example.backend_folders.pokemonEntities.Pokedex;
+import org.example.backend_folders.pokemonEntities.*;
 
-import org.example.backend_folders.pokemonEntities.Pokemon;
 import org.example.backend_folders.repositories.PokeVariableDescRepository;
 
 import org.springframework.http.ResponseEntity;
@@ -50,6 +48,12 @@ public class PokemonService {
     public Pokedex getAllTypes() {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Pokedex> forEntity = restTemplate.getForEntity(uri + "type", Pokedex.class);
+        return forEntity.getBody();
+    }
+
+    public AllPokemonTypeRef getAllPokemonByType(String type) {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<AllPokemonTypeRef> forEntity = restTemplate.getForEntity(uri + "type/" + type, AllPokemonTypeRef.class);
         return forEntity.getBody();
     }
 }

@@ -5,6 +5,7 @@ import {catchError, throwError} from 'rxjs';
 import {Sprites} from '../model/sprites';
 import {Pokemon} from '../model/pokemon';
 import {Trainer} from '../model/trainer';
+import {Table} from 'primeng/table';
 
 
 @Injectable({
@@ -31,6 +32,10 @@ export class PokemonService {
 
   getAllTypes(){
     return this.httpClient.get(this._apiURL + "/api/pokemon/types")
+  }
+
+  getAllPokemonByType(type_name: string){
+    return this.httpClient.get(this._apiURL + "/api/pokemon/type/" + type_name)
   }
 
   changePage(url: string = '', person_response_object?: Trainer){

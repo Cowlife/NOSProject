@@ -2,7 +2,7 @@ CREATE SCHEMA IF NOT EXISTS nos_schema;
 
 ALTER SCHEMA nos_schema OWNER TO postgres;
 
-CREATE TABLE nos_schema.TRAINER_DATA (
+CREATE TABLE if not exists nos_schema.TRAINER_DATA (
                            ID UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                            first_name VARCHAR(50) NOT NULL,
                            email VARCHAR(50) UNIQUE NOT NULL,

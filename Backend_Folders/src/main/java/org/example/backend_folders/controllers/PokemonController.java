@@ -1,9 +1,7 @@
 package org.example.backend_folders.controllers;
 
 
-import org.example.backend_folders.pokemonEntities.NamedAPIResource;
-import org.example.backend_folders.pokemonEntities.Pokedex;
-import org.example.backend_folders.pokemonEntities.Pokemon;
+import org.example.backend_folders.pokemonEntities.*;
 import org.example.backend_folders.services.PokemonService;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +38,11 @@ public class PokemonController {
     @GetMapping("/types")
     public Pokedex getAllTypes(){
         return pokemonService.getAllTypes();
+    }
+
+    @GetMapping("/type/{type}")
+    public AllPokemonTypeRef getAllPokemonByType(@PathVariable String type){
+        return pokemonService.getAllPokemonByType(type);
     }
 
     @PostMapping

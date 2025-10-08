@@ -47,6 +47,6 @@ export class LoginComponent {
   }
 
   registerPage() {
-
+    this.pokemonService.changePage('pokemon/register')
   }
 }
