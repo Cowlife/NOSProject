@@ -1,6 +1,17 @@
-
-
+<p-toast />
 <div style="background-color: #b6956f;">
+  <!--Dialog that appears when nothing is found-->
+  <p-dialog closable="false"
+            [modal]="true" [(visible)]="dialog_visible"
+            [style]="{ width: '25rem' ,
+                       textAlign: 'center'}">
+    <h2 class="p-text-secondary block mb-8">Values could not be found.</h2>
+    <div class="flex justify-end gap-2">
+      <p-button label="Continue" severity="success" (click)="dialog_visible = false" />
+    </div>
+  </p-dialog>
+
+  <!--Elements that filter pokemon cards-->
   <p-floatlabel variant="on" style="display: flex">
     <input [disabled]="is_being_filtered" pInputText id="on_label" [(ngModel)]="search_value" autocomplete="off" />
     <label style="margin: auto" for="on_label">Name To Search</label>
@@ -8,10 +19,11 @@
       <p-splitbutton (onClick)="orderValues()" [model]="items"
                      [icon]="this.orderArray[this.orderIconIndex]"
                      dropdownIcon="pi pi-search" [disabled]="is_being_filtered"/>
-      <p-button (onClick)="filterName('', true)" icon="pi pi-filter-slash" [rounded]="true" [disabled]="!is_being_filtered"/>
+      <p-button (onClick)="filterName('')" icon="pi pi-filter-slash" [rounded]="true" [disabled]="!is_being_filtered"/>
     </div>
   </p-floatlabel>
 
+  <!--Pokemon List-->
   <div class="flex-container" >
     <div *ngFor="let type_category of type_categories.results" class="checkbox_ui">
       <p-checkbox [inputId]="type_category.url" name="group"  [value]="type_category" [(ngModel)]="selected_type_categories"
@@ -21,19 +33,22 @@
 
     <div *ngFor="let result of this.pokemon_item_select; let i = index">
       <p-card>
-        <p-button [outlined]="true">
+        <p-button [outlined]="true" >
           <img [src]="result.label" alt="Image" width="96">
         </p-button>
         {{result.title}}
         <div>
-          <p-button class="button-type1-ui" [disabled]="true"  [label]="result.value"/>
+          <p-button class="button-type1-ui"  [disabled]="true"  [label]="result.value"/>
           <p-button class="button-type2-ui" *ngIf="result.secValue != '' " [disabled]="true" [label]="result.secValue"/>
         </div>
-        <p-button class="favorite-button" icon="pi pi-heart" [rounded]="true" [text]="true"/>
+        <p-button (onClick)="changeFavorite(result)" class="favorite-button"
+                  [icon]="result.favorite ? 'pi pi-heart-fill' : 'pi pi-heart'" [rounded]="true" [text]="true"/>
       </p-card>
     </div>
   </div>
 </div>
+
+<!--Paginator to restrict retrieval-->
 <div style="margin-top: auto">
   <p-paginator [pageLinkSize]="defaultRecords" (onPageChange)="onPageChange($event)" [first]="0" [rows]="10" [totalRecords]="record_length" [rowsPerPageOptions]="[10, 20, 30]" />
 </div>

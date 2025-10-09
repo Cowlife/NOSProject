@@ -1,5 +1,6 @@
 import {PokemonType} from './pokemonType';
 import {Sprites} from './sprites';
+import {BaseStat} from './baseStat';
 
 export interface Pokemon{
   id: number,
@@ -8,5 +9,5 @@ export interface Pokemon{
   sprites: Sprites,
   types: PokemonType[],
   favorite: boolean,
-
+  stats: BaseStat[],
 }

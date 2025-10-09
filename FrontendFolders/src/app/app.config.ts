@@ -17,6 +17,6 @@ export const appConfig: ApplicationConfig = {
         preset: Aura
       }
     }),
-    provideHttpClient(withFetch())
+    provideHttpClient(withFetch()),
   ]
 };

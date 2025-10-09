@@ -5,37 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-
-import java.util.List;
-
 
 @Data // getter, setter, required args constructor
 @NoArgsConstructor // removing empty constructor
 @AllArgsConstructor // removing this.id = id inside constructor
 @Entity
 @Builder
-public class Pokemon {
+public class BaseStat {
 
     @Id
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer baseStatId;
 
-    private String name;
+    private Integer base_stat;
 
-    private Integer order;
-
-    private boolean favorite = false;
-
-    @OneToMany
-    private List<PokemonType> types;
-
-    @OneToMany
-    private List<BaseStat> stats;
+    private Integer effort;
 
     @OneToOne
-    private Sprites sprites;
-
-    @OneToMany
-    private List<MoveShort> moves;
+    private NamedAPIResource stat;
 
 }

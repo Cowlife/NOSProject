@@ -14,12 +14,13 @@ import java.util.UUID;
 @Service
 public class PokemonService {
 
-    private final PokeVariableDescRepository pokeVariableDescRepository;
+
     String uri = "https://pokeapi.co/api/v2/";
 
-    public PokemonService(PokeVariableDescRepository pokeVariableDescRepository) {
-        this.pokeVariableDescRepository = pokeVariableDescRepository;
+    public PokemonService() {
+
     }
+
     public Pokedex getAllPokemon() {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Pokedex> forEntity = restTemplate.getForEntity(uri + "pokemon?limit=100000&offset=0", Pokedex.class);
@@ -32,18 +33,6 @@ public class PokemonService {
         return forEntity.getBody();
     }
 
-    public Optional<NamedAPIResource> getPokemonById(String id) {
-        return pokeVariableDescRepository.findById(id);
-    }
-
-    public NamedAPIResource savePokemon(NamedAPIResource pokemon) {
-        return pokeVariableDescRepository.save(pokemon);
-    }
-
-    public void deletePokemon(String id) {
-        pokeVariableDescRepository.deleteById(id);
-    }
-
 
     public Pokedex getAllTypes() {
         RestTemplate restTemplate = new RestTemplate();
@@ -51,9 +40,16 @@ public class PokemonService {
         return forEntity.getBody();
     }
 
+
     public AllPokemonTypeRef getAllPokemonByType(String type) {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<AllPokemonTypeRef> forEntity = restTemplate.getForEntity(uri + "type/" + type, AllPokemonTypeRef.class);
+        return forEntity.getBody();
+    }
+
+    public MoveLong getMoveInfo(String move){
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<MoveLong> forEntity = restTemplate.getForEntity(uri + "move/" + move, MoveLong.class);
         return forEntity.getBody();
     }
 }

@@ -30,11 +30,6 @@ public class PokemonController {
         return pokemonService.getPokemonElementsByName(name);
     }
 
-    @GetMapping("/id/{id}")
-    public Optional<NamedAPIResource> getPokemonById(@PathVariable String id) {
-        return pokemonService.getPokemonById(id);
-    }
-
     @GetMapping("/types")
     public Pokedex getAllTypes(){
         return pokemonService.getAllTypes();
@@ -45,14 +40,9 @@ public class PokemonController {
         return pokemonService.getAllPokemonByType(type);
     }
 
-    @PostMapping
-    public NamedAPIResource createPokemon(@RequestBody NamedAPIResource pokemon) {
-        return pokemonService.savePokemon(pokemon);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deletePokemon(@PathVariable String id) {
-        pokemonService.deletePokemon(id);
+    @GetMapping("/moves/{name}")
+    public MoveLong getPokemonMoveInfo(@PathVariable String name){
+        return pokemonService.getMoveInfo(name);
     }
 
 }

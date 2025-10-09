@@ -2,8 +2,16 @@ import {Component, Inject} from '@angular/core';
 import {Pokedex} from '../../../model/pokedex';
 import {PokemonService} from '../../pokemon.service';
 import {Card} from 'primeng/card';
-import {Button} from 'primeng/button';
-import {FilterMatchMode, FilterService, MenuItem, MessageService, PrimeTemplate, SelectItem} from 'primeng/api';
+import {Button, ButtonDirective} from 'primeng/button';
+import {
+  ConfirmationService,
+  FilterMatchMode,
+  FilterService,
+  MenuItem,
+  MessageService,
+  PrimeTemplate,
+  SelectItem
+} from 'primeng/api';
 import {AsyncPipe, CommonModule, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {Pokemon} from '../../../model/pokemon';
 import {PaginatorModule, PaginatorState} from 'primeng/paginator';
@@ -20,6 +28,10 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {SplitButton} from 'primeng/splitbutton';
 import {Toast} from 'primeng/toast';
+import {ConfirmDialog} from 'primeng/confirmdialog';
+import {Dialog} from 'primeng/dialog';
+import {Drawer} from 'primeng/drawer';
+import {Favorite} from '../../../model/favorite';
 
 
 
@@ -44,8 +56,13 @@ import {Toast} from 'primeng/toast';
     InputText,
     SplitButton,
     TableModule,
-    Toast
+    Toast,
+    ConfirmDialog,
+    Dialog,
+    Drawer,
+    ButtonDirective
   ],
+  providers: [MessageService],
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.css']
 })
@@ -54,12 +71,17 @@ export class PokemonListComponent {
   pokemon_list: any = {} as Pokedex;
   record_length: number = 0;
 
+  protected readonly console = console;
+  dialog_visible: boolean = false;
+
   filteredArray: any[] = []
   defaultRecords: number = 10;
   defaultPage: number = 0;
   data_ref: PaginatorState = {} as PaginatorState;
   checked_types_array: any[] = [];
   filtered_types_array: any[] = [];
+  intersection_array: any[] = [];
+  ordered_array: any[] = [];
 
   pokemon_item_select: PokeSelectItem[] = []
 
@@ -72,11 +94,12 @@ export class PokemonListComponent {
   is_being_filtered: boolean = false
   orderIconIndex: number = 0;
   orderArray = ['pi pi-sort-alt-slash', 'pi pi-sort-alpha-down', 'pi pi-sort-alpha-up-alt']
-  private order_function: Record<number, any>;
+  private order_function: Record<number, any> = {};
 
 
   constructor(protected pokemonService: PokemonService,
-              private filterService: FilterService) {
+              private filterService: FilterService,
+              protected messageService: MessageService) {
     this.items = [
       {
         label: "Equals",
@@ -104,17 +127,13 @@ export class PokemonListComponent {
       },
     ];
 
-    this.order_function  = {
-      0: this.pokemon_item_select,
-      1: this.pokemon_item_select.sort((a:any, b:any) => a.title.localeCompare(b.title)),
-      2: this.pokemon_item_select.sort((a:any, b:any) => b.title.localeCompare(a.title)),
-    }
   }
 
   ngOnInit(){
-    this.pokemonService.getAllPokemon().subscribe(data=>{
+    this.pokemonService.getAllPokemon().subscribe((data: any)=>{
       this.pokemon_list = data;
       this.record_length = this.pokemon_list.results.length;
+
       this.matchModeOptions = [
         { label: 'Starts With', value: FilterMatchMode.STARTS_WITH },
         { label: 'Contains', value: FilterMatchMode.CONTAINS},
@@ -123,6 +142,12 @@ export class PokemonListComponent {
         { label: 'Equals',value: FilterMatchMode.EQUALS},
         { label: 'Not Equals',value: FilterMatchMode.NOT_EQUALS}
       ];
+
+      this.pokemonService.getFavoritesByEmail().subscribe((value: any) => {
+        this.pokemonService.favorite_pokemon = value
+      })
+
+      console.dir(data)
 
       this.filteredArray = this.pokemon_list.results.slice(0, this.defaultRecords);
 
@@ -143,19 +168,34 @@ export class PokemonListComponent {
       this.pokemonService.getPokemonElement(element.name)
     );
 
+
     // fork Join used to wait for request and maintain order
     forkJoin(requests).subscribe((types: any) => {
       types.forEach(
         (element: any)=> {
-          const primary = element.types[0]
-          const secondary = element.types[1] ?? ""
-          this.pokemon_item_select.push({
-            title: element.name,
-            value: primary.type.name,
-            secValue: secondary != "" ? secondary.type.name : "",
-            label: element.sprites.front_default,
-
-          })
+          let bool_ref = false;
+          this.pokemonService.checkIfEmailAndPokemonExistInFavorite(
+            this.pokemonService.current_user.email, element.name).subscribe((data: any)=>{
+            bool_ref = data;
+            const primary = element.types[0]
+            const secondary = element.types[1] ?? ""
+            this.pokemon_item_select.push({
+              title: element.name,
+              value: primary.type.name,
+              secValue: secondary != "" ? secondary.type.name : "",
+              label: element.sprites.front_default,
+              favorite: bool_ref,
+            })
+            if (bool_ref &&
+              !this.pokemonService.checkIfEmailAndPokemonExistInFavoriteRemainder(element.name)){
+              this.pokemonService.favorite_pokemon.push({
+                favoritePokemonName: element.name,
+                trainerEmail: this.pokemonService.current_user.email,
+                pokemonImage: element.sprites.front_default,
+                pokemonTypes: [primary.type.name, secondary.type?.name ?? ""].join(",")
+              })
+            }
+          });
         }
       )
 
@@ -166,7 +206,7 @@ export class PokemonListComponent {
 
 
 
-  onPageChange(data: PaginatorState) {
+  onPageChange(data: PaginatorState, reset: boolean = false) {
     if (Object.keys(data).length !== 0){
       this.data_ref = data;
     }
@@ -175,8 +215,9 @@ export class PokemonListComponent {
     this.defaultPage = this.data_ref.page ?? 0;
 
     this.filteredArray = [];
-    const array_to_slice = this.checked_types_array.length == 0 ?
-      this.pokemon_list.results : this.checked_types_array;
+
+    const array_to_slice = this.intersection_array.length <= 0 ?
+      this.pokemon_list.results : this.intersection_array;
     this.filteredArray = array_to_slice.slice(
       this.defaultPage * this.defaultRecords,
       (this.defaultPage + 1) * this.defaultRecords );
@@ -192,7 +233,15 @@ export class PokemonListComponent {
   matchTypeSearch(checked: string[]) {
     if (checked.length == 0){
       this.checked_types_array = [];
-      this.record_length = this.pokemon_list.results.length
+      if (this.filtered_types_array.length > 0){
+        this.intersection_array = this.filtered_types_array
+        this.record_length = this.intersection_array.length
+      }
+      else{
+        this.intersection_array = [];
+        this.record_length = this.pokemon_list.results.length
+      }
+
       this.onPageChange({})
     }
     else{
@@ -214,13 +263,23 @@ export class PokemonListComponent {
             )
           })
         this.record_length = this.checked_types_array.length
-        
+
         console.log("Below is checkedArray:")
         console.dir(this.checked_types_array)
         console.log("Below is filteredArray:")
         console.dir(this.filtered_types_array)
 
-        //this.onPageChange({})
+        const union = this.checked_types_array.concat(this.filtered_types_array);
+        this.intersection_array = this.filtered_types_array.length == 0 ?
+        this.checked_types_array : this.getArrayDuplicates(union,'name');
+
+        if(this.checked_types_array.length <= 0){
+          this.showErrorDialog()
+        }
+
+
+        this.onPageChange({})
+
       });
     }
 
@@ -228,14 +287,19 @@ export class PokemonListComponent {
 
   }
 
-  protected filterName(case_string: string = '', reset: boolean = false) {
+  protected filterName(case_string: string = '') {
     if (case_string == ''){
+      this.filtered_types_array = []
       this.is_being_filtered = false
-      if (reset){
-        this.checked_types_array = [];
+      if (this.checked_types_array.length > 0){
+        this.intersection_array = this.checked_types_array;
+        this.record_length = this.intersection_array.length
+      }
+      else{
+        this.intersection_array = [];
+        this.record_length = this.pokemon_list.results.length
       }
       this.search_value = ''
-      this.record_length = this.pokemon_list.results.length
       this.onPageChange({})
     }
     else{
@@ -251,33 +315,87 @@ export class PokemonListComponent {
           }
         }
       )
+
+      this.filtered_types_array = filteredArray
+
       console.log("Below is filteredArray:")
       console.dir(filteredArray)
       console.log("Below is checkedArray:")
       console.dir(this.checked_types_array)
+
+      const union = this.checked_types_array.concat(this.filtered_types_array);
+      this.intersection_array = this.checked_types_array.length == 0 ?
+        this.filtered_types_array : this.getArrayDuplicates(union,'name');
+
       this.is_being_filtered = true
       this.record_length = filteredArray.length
-      this.filtered_types_array = filteredArray;
 
-      //this.onPageChange({})
+      if(this.filtered_types_array.length <= 0){
+        this.showErrorDialog();
+      }
+
+      this.onPageChange({})
     }
 
   }
 
-  arrayComparators(){
-
-  }
+  // TODO:
 
   orderValues() {
-    var array_to_order = (this.checked_types_array.length == 0 ?
-      this.pokemon_list.results : this.checked_types_array);
+    this.ordered_array = []
+    this.ordered_array = (this.intersection_array.length == 0 ?
+      this.pokemon_list.results : this.intersection_array);
     this.orderIconIndex == 2 ?
       this.orderIconIndex = 0 : ++this.orderIconIndex;
     this.onPageChange({})
+
+    this.order_function  = {
+      0: this.pokemon_list.results,
+      1: this.pokemon_list.results.sort((a:any, b:any) => a.name.localeCompare(b.name)),
+      2: this.pokemon_list.results.sort((a:any, b:any) => b.name.localeCompare(a.name)),
+    }
+
+    this.pokemon_list.results.sort((a:any, b:any) => a.name.localeCompare(b.name));
+
 
     return this.orderArray[this.orderIconIndex];
   }
 
 
-  protected readonly console = console;
+  getArrayDuplicates(arr: any, key: any) {
+    const map: any = {};
+    const duplicates: any[] = [];
+
+    arr.forEach((item: any) => {
+      const keyValue = item[key];
+      if (map[keyValue]) {
+        duplicates.push(item);
+      } else {
+        map[keyValue] = true;
+      }
+    });
+
+    return duplicates;
+  }
+
+  showErrorDialog() {
+    this.record_length = this.pokemon_list.results.length
+    this.orderIconIndex = 0
+    this.is_being_filtered = false
+    this.search_value = ''
+    this.dialog_visible = true;
+    this.selected_type_categories = [];
+    this.intersection_array = [];
+  }
+
+  changeFavorite(pokemon: PokeSelectItem){
+    const favorite_element = {} as Favorite;
+    favorite_element.favoritePokemonName = pokemon.title ?? ""
+    favorite_element.trainerEmail = this.pokemonService.current_user.email;
+    pokemon.favorite ?
+      this.pokemonService.deleteFavoriteElement(favorite_element, this.messageService)
+    : this.pokemonService.createFavoriteElement(favorite_element, this.messageService)
+    pokemon.favorite = !pokemon.favorite;
+  }
+
 }

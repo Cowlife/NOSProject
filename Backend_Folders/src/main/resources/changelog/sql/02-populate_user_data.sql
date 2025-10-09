@@ -6,5 +6,5 @@ INSERT INTO nos_schema.TRAINER_DATA (first_name, email, password) values ('Catha
 INSERT INTO nos_schema.TRAINER_DATA (first_name, email, password) values ('Kare','kare@eew.dle','Jone');
 INSERT INTO nos_schema.TRAINER_DATA (first_name, email, password) values ('Edgard','ed@com.pt','Jone');
 INSERT INTO nos_schema.TRAINER_DATA (first_name, email, password) values ('Paton','attpt@eel.de','Jone');
-INSERT INTO nos_schema.TRAINER_DATA (first_name, email, password) values ('Lanita','laneoita@com.pt','Jone');
+INSERT INTO nos_schema.TRAINER_DATA (first_name, email, password) values ('Lanita','laneoita@com.pt','Marsh');
 INSERT INTO nos_schema.TRAINER_DATA (first_name, email, password) values ('Ahatron','rabi@ewwre.co','Jone');

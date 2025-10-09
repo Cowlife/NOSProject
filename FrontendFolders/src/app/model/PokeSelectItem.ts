@@ -14,8 +14,10 @@ export interface PokeSelectItem<T = any> extends SelectItem{
    *
    * The other variables created are:
    * @var secValue - Describes secondary pokemon type
+   * @var favorite - Describe if element is put inside the favourite table
    **/
 
   secValue?: T;
+  favorite?: boolean;
 
 }
