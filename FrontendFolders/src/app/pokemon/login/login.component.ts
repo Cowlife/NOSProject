@@ -7,6 +7,8 @@ import {Button} from 'primeng/button';
 import {PokemonService} from '../pokemon.service';
 import {HttpClient} from '@angular/common/http';
 import {Trainer} from '../../model/trainer';
+import {Toast} from 'primeng/toast';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-login',
@@ -16,18 +18,21 @@ import {Trainer} from '../../model/trainer';
     FloatLabel,
     InputText,
     Password,
-    Button
+    Button,
+    Toast
   ],
+  providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  email_value: any;
-  password_value: any;
+  email_value: any = '';
+  password_value: any = '';
 
 
   constructor(private httpClient: HttpClient,
-              private pokemonService: PokemonService) {}
+              private pokemonService: PokemonService,
+              protected messageService: MessageService,) {}
 
   accessPage() {
     this.httpClient.get(this.pokemonService.apiURL + '/api/trainers/search/' + this.email_value)
@@ -36,15 +41,15 @@ export class LoginComponent {
           let trainer_response_object = response as Trainer
           const cond1 = this.email_value == trainer_response_object.email;
           const cond2 = this.password_value == trainer_response_object.password;
-          console.log(cond1)
-          console.log(cond2)
-          cond1 && cond2 ?
-            this.pokemonService.changePage('pokemon/hub', trainer_response_object) :
-            setTimeout(() => {alert("Wrong password/email.")}, 500);
+          if (cond1 && cond2){
+            this.pokemonService.changePage('pokemon/hub', trainer_response_object)
+          }
         },
-        error: error => setTimeout(() => {alert("Account not found.")}, 500)
+        error: error => this.messageService.add({ severity: 'danger', summary: 'Error', detail: 'Account not found', life: 3000 })
       })
+
   }
+
 
   registerPage() {
     this.pokemonService.changePage('pokemon/register')

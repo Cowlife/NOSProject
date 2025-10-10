@@ -6,8 +6,8 @@ CREATE TABLE if not exists nos_schema.TRAINER_DATA (
                            ID UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                            first_name VARCHAR(50) NOT NULL,
                            email VARCHAR(50) UNIQUE NOT NULL,
-                           password VARCHAR(50) NOT NULL
-
+                           password VARCHAR(250) NOT NULL,
+                           rank VARCHAR(250) NOT NULL
 );
 
 CREATE TABLE if not exists nos_schema.FAVORITE_TABLE(
@@ -17,8 +17,8 @@ CREATE TABLE if not exists nos_schema.FAVORITE_TABLE(
      POKEMON_HELD_ITEM VARCHAR(50),
      POKEMON_MOVES VARCHAR(75),
      POKEMON_STATS INTEGER[],
-     POKEMON_IMAGE VARCHAR(100),
-     POKEMON_TYPES VARCHAR(50),
+     POKEMON_IMAGE VARCHAR(100) NOT NULL,
+     POKEMON_TYPES VARCHAR(50) NOT NULL,
      CONSTRAINT unique_trainer_pokemon UNIQUE (TRAINER_EMAIL, FAVORITE_POKEMON_NAME)
 );
 

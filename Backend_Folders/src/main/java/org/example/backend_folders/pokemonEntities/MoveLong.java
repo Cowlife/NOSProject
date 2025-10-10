@@ -18,6 +18,8 @@ public class MoveLong {
     @Id
     private Integer id;
 
+    private String name;
+
     private Integer accuracy;
 
     @OneToOne

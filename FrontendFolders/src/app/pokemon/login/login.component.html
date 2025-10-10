@@ -1,14 +1,20 @@
+<p-toast/>
 <h3 style="text-align: center;">LOGIN PAGE</h3>
 
-<div>
-  <p-floatlabel variant="on">
-    <input pInputText id="on_label" [(ngModel)]="email_value" autocomplete="off" />
-    <label style="margin: auto" for="on_label">Email</label>
-  </p-floatlabel>
-  <p-floatlabel variant="on">
-    <p-password [(ngModel)]="password_value" inputId="on_label" [toggleMask]="true"/>
-    <label for="on_label">Password</label>
-  </p-floatlabel>
-  <p-button (onClick)="accessPage()" label="Login" severity="success" [outlined]="true" />
-  <p-button (onClick)="registerPage()" label="Register" severity="info" [outlined]="true" />
-</div>
+  <div style="display: flex; justify-content: center; align-items: center;">
+    <p-floatlabel variant="on">
+      <input pInputText id="on_label" [(ngModel)]="email_value" autocomplete="off" />
+      <label style="margin: auto" for="on_label">Email</label>
+    </p-floatlabel>
+  </div>
+  <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+    <p-floatlabel variant="on">
+      <p-password [(ngModel)]="password_value" inputId="on_label" [toggleMask]="true"/>
+      <label for="on_label">Password</label>
+    </p-floatlabel>
+  </div>
+  <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+    <p-button (onClick)="accessPage()" label="Login" severity="success" [outlined]="true" />
+    <p-button (onClick)="registerPage()" label="Register" severity="info" [outlined]="true" />
+  </div>
+

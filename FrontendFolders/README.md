@@ -32,5 +32,6 @@ Ran the following sequuence of commands to install version 18 of PrimeNG and UUI
 * `npm install primeicons`;  
 * `npm i primeng@18.0.2-patch.1`; 
 * `npm install primeng @primeng/themes`;
-* `npm install uuid`.
+* `npm install uuid`;
+* `npm install bycrypt`
 

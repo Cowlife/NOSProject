@@ -4,12 +4,33 @@
   flex-wrap: wrap;
   margin-left: 100px;
   margin-right: 100px;
-  margin-top: 30px;
+  margin-top: 60px;
+}
+
+:host ::ng-deep .p-button-outlined{
+  border-color: rgba(0, 0, 0, 0);
+}
+
+:host ::ng-deep .favorite-button .p-button-icon-only.p-button-rounded{
+  background: #ffffff;
+}
+
+.favorite-button{
+  position: absolute;
+  transform: translate(55px,-245px);
+}
+
+:host ::ng-deep .p-button-text{
+  color: #ff0000;
+}
+
+:host ::ng-deep .p-floatlabel label{
+  top: 25%
 }
 
 .flex-container > div {
   width: 200px;
-  margin: 10px 10px 200px;
+  margin: 10px 10px 250px;
   text-align: center;
   height: 50px;
   font-size: 20px;
@@ -26,18 +47,12 @@ p-image{
   align-items: center;
 }
 
-.favorite-button{
-  position: absolute;
-  transform: translate(55px,-175px);
-}
+
 
 
 .button-type1-ui{
-  margin-right: 5px;
-}
-
-.button-type2-ui{
-  margin-left: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .checkbox_ui {

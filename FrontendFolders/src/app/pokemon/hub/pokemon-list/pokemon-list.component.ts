@@ -32,6 +32,7 @@ import {ConfirmDialog} from 'primeng/confirmdialog';
 import {Dialog} from 'primeng/dialog';
 import {Drawer} from 'primeng/drawer';
 import {Favorite} from '../../../model/favorite';
+import {ArtService} from '../../art.service';
 
 
 
@@ -99,7 +100,8 @@ export class PokemonListComponent {
 
   constructor(protected pokemonService: PokemonService,
               private filterService: FilterService,
-              protected messageService: MessageService) {
+              protected messageService: MessageService,
+              protected artService: ArtService) {
     this.items = [
       {
         label: "Equals",
@@ -133,7 +135,7 @@ export class PokemonListComponent {
     this.pokemonService.getAllPokemon().subscribe((data: any)=>{
       this.pokemon_list = data;
       this.record_length = this.pokemon_list.results.length;
-
+      this.messageService.add({ severity: 'success', summary: 'SUCCESS', detail: 'Account entered successfully', life: 3000 });
       this.matchModeOptions = [
         { label: 'Starts With', value: FilterMatchMode.STARTS_WITH },
         { label: 'Contains', value: FilterMatchMode.CONTAINS},
@@ -147,7 +149,6 @@ export class PokemonListComponent {
         this.pokemonService.favorite_pokemon = value
       })
 
-      console.dir(data)
 
       this.filteredArray = this.pokemon_list.results.slice(0, this.defaultRecords);
 
@@ -186,15 +187,7 @@ export class PokemonListComponent {
               label: element.sprites.front_default,
               favorite: bool_ref,
             })
-            if (bool_ref &&
-              !this.pokemonService.checkIfEmailAndPokemonExistInFavoriteRemainder(element.name)){
-              this.pokemonService.favorite_pokemon.push({
-                favoritePokemonName: element.name,
-                trainerEmail: this.pokemonService.current_user.email,
-                pokemonImage: element.sprites.front_default,
-                pokemonTypes: [primary.type.name, secondary.type?.name ?? ""].join(",")
-              })
-            }
+
           });
         }
       )
@@ -264,11 +257,6 @@ export class PokemonListComponent {
           })
         this.record_length = this.checked_types_array.length
 
-        console.log("Below is checkedArray:")
-        console.dir(this.checked_types_array)
-        console.log("Below is filteredArray:")
-        console.dir(this.filtered_types_array)
-
         const union = this.checked_types_array.concat(this.filtered_types_array);
         this.intersection_array = this.filtered_types_array.length == 0 ?
         this.checked_types_array : this.getArrayDuplicates(union,'name');
@@ -317,11 +305,6 @@ export class PokemonListComponent {
       )
 
       this.filtered_types_array = filteredArray
-
-      console.log("Below is filteredArray:")
-      console.dir(filteredArray)
-      console.log("Below is checkedArray:")
-      console.dir(this.checked_types_array)
 
       const union = this.checked_types_array.concat(this.filtered_types_array);
       this.intersection_array = this.checked_types_array.length == 0 ?

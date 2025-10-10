@@ -29,4 +29,7 @@ public class Trainer {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "rank", nullable = false)
+    private String rank;
+
 }

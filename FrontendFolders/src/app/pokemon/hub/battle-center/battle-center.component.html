@@ -1,0 +1,78 @@
+<div class="card">
+  <p-table #dt
+           [stripedRows] = "true"
+           [columns]="cols"
+           [value]="trainers"
+           [paginator]="true"
+           [rows]="5"
+           [rowsPerPageOptions]="[5, 10, 20]"
+           responsiveLayout="scroll">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns">{{col.header}}</th>
+      </tr>
+      <tr>
+        <th [pSortableColumn]="col.field" *ngFor="let col of columns">
+          <ng-container *ngIf="col.field != ''">
+            <p-columnFilter
+              type="text"
+              [field]="col.field"
+              [matchModeOptions]="matchModeOptions"
+              [matchMode]="FilterMatchMode.STARTS_WITH" />
+            <p-sortIcon [field]="col.field" />
+          </ng-container>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+        <td *ngFor="let col of columns">
+          <ng-container *ngIf="col.field != ''">
+            {{rowData[col.field]}}
+          </ng-container>
+          <ng-container *ngIf="col.field == ''">
+            <p-button (click)="showDialog(columns)" label="Battle" severity="danger"/>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+
+<p-dialog
+  header="Header"
+  [modal]="true"
+  [(visible)]="dialog_visibility"
+  [style]="{ width: '50rem', height: '45rem'}">
+  <h4 style="text-align: center">Battle placeholder</h4>
+  <div class="grid-container">
+    <p-card>
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="Image" width="96">
+      <h4>Pokemon</h4>
+    </p-card>
+    <p-card>
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="Image" width="96">
+      <h4>Pokemon</h4>
+    </p-card>
+    <p-card>
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="Image" width="96">
+      <h4>Pokemon</h4>
+    </p-card>
+    <p-card>
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="Image" width="96">
+      <h4>Pokemon</h4>
+    </p-card>
+    <p-card>
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="Image" width="96">
+      <h4>Pokemon</h4>
+    </p-card>
+    <p-card>
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="Image" width="96">
+      <h4>Pokemon</h4>
+    </p-card>
+  </div>
+  <div style="margin-top: 15px; display: flex; justify-content: center; align-items: center;">
+    <p-button (click)="this.messageService.add({ severity: 'warn', summary: 'TODO', detail: 'Not yet implemented.', life: 3000 })" label="Initiate Battle" severity="danger"/>
+  </div>
+</p-dialog>

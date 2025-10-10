@@ -4,9 +4,12 @@ import org.example.backend_folders.remainderEntities.Trainer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, UUID> {
     Trainer findByEmailEquals(String email);
+
+    List<Trainer> findTrainersByEmailIsNot(String email);
 }

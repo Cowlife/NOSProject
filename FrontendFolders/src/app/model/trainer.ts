@@ -1,9 +1,10 @@
 
 export interface Trainer{
   id: string,
-  name: string,
+  firstName: string,
   email: string,
   password: string,
+  rank:string,
 }
 
 export enum RoleName{

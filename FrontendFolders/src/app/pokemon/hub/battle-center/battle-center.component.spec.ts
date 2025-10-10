@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditMovesPageComponent } from './edit-moves-page.component';
+import { BattleCenterComponent } from './battle-center.component';
 
-describe('EditMovesPageComponent', () => {
-  let component: EditMovesPageComponent;
-  let fixture: ComponentFixture<EditMovesPageComponent>;
+describe('BattleCenterComponent', () => {
+  let component: BattleCenterComponent;
+  let fixture: ComponentFixture<BattleCenterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditMovesPageComponent]
+      imports: [BattleCenterComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EditMovesPageComponent);
+    fixture = TestBed.createComponent(BattleCenterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

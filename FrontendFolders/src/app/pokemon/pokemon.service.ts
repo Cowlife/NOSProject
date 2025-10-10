@@ -47,15 +47,6 @@ export class PokemonService {
     return this.httpClient.get(this._apiURL + "/api/favorite?email=" + this.current_user.email)
   }
 
-  checkIfEmailAndPokemonExistInFavoriteRemainder(poke_name: string){
-    for (var ind_pokemon of this.favorite_pokemon){
-      if (ind_pokemon.favoritePokemonName == poke_name){
-        return true
-      }
-    }
-    return false
-  }
-
   checkIfEmailAndPokemonExistInFavorite(email: string, poke_name: string){
     return this.httpClient.get(this._apiURL + "/api/favorite/exists?email=" + email + "&name=" + poke_name )
   }
@@ -65,7 +56,6 @@ export class PokemonService {
       .subscribe({
         next: response => {
           this.post_data = response;
-          console.dir(this.post_data)
           this.alertString = "Favorite is created"
         },
         error: error => this.alertString = error.toString(),
@@ -73,11 +63,7 @@ export class PokemonService {
           messageService.add({severity: 'success', summary: 'Element Added', detail: this.alertString})
           favorite.pokemonImage = this.post_data.pokemonImage
           favorite.pokemonTypes = this.post_data.pokemonTypes
-          console.log(favorite.pokemonTypes)
-          console.log(":::::::::::::::")
-          console.log(this.post_data.pokemonTypes)
           this.favorite_pokemon.push(favorite)
-          console.dir(this.favorite_pokemon)
           this.post_data = {}
         }
       })
@@ -92,15 +78,26 @@ export class PokemonService {
       complete: () => {
         messageService.add({severity: 'error', summary: 'Element Removed', detail: this.alertString})
         this.favorite_pokemon = this.favorite_pokemon.filter(fav => fav.favoritePokemonName !== favorite_to_delete.favoritePokemonName)
-        console.dir(this.favorite_pokemon)
       }
     })
+  }
+
+  getMoveInfo(move_name: string){
+    this.httpClient.get(this._apiURL + '/api/pokemon/moves/' + move_name)
   }
 
   changePage(url: string = '', person_response_object?: Trainer){
     this._current_user = person_response_object ? person_response_object : {} as Trainer
     this.favorite_pokemon = person_response_object ? this.favorite_pokemon : [];
     this.router.navigate([url]).then(r => {});
+  }
+
+  getAllTrainersExceptOne(){
+    return this.httpClient.get(this._apiURL + "/api/trainers/excludes/" + this.current_user.email)
+  }
+
+  getAllTrainers(){
+    return this.httpClient.get(this._apiURL + "/api/trainers")
   }
 
 }

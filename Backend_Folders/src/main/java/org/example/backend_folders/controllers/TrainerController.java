@@ -24,6 +24,11 @@ public class TrainerController {
         return trainerService.getAllTrainers();
     }
 
+    @GetMapping("/excludes/{email}")
+    public List<Trainer> getAllTrainersExceptOne(@PathVariable String email) {
+        return trainerService.getAllTrainersExcludeOne(email);
+    }
+
     @GetMapping("/{id}")
     public Optional<Trainer> getTrainerById(@PathVariable UUID id) {
         return trainerService.getPersonById(id);

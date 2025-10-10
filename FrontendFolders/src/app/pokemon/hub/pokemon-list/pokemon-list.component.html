@@ -1,5 +1,5 @@
 <p-toast />
-<div style="background-color: #b6956f;">
+<div style="background-color: #e1dad3;">
   <!--Dialog that appears when nothing is found-->
   <p-dialog closable="false"
             [modal]="true" [(visible)]="dialog_visible"
@@ -12,7 +12,8 @@
   </p-dialog>
 
   <!--Elements that filter pokemon cards-->
-  <p-floatlabel variant="on" style="display: flex">
+  <div style="display: flex; justify-content: center; align-items: center; text-align: center">
+  <p-floatlabel variant="on" >
     <input [disabled]="is_being_filtered" pInputText id="on_label" [(ngModel)]="search_value" autocomplete="off" />
     <label style="margin: auto" for="on_label">Name To Search</label>
     <div>
@@ -22,7 +23,7 @@
       <p-button (onClick)="filterName('')" icon="pi pi-filter-slash" [rounded]="true" [disabled]="!is_being_filtered"/>
     </div>
   </p-floatlabel>
-
+  </div>
   <!--Pokemon List-->
   <div class="flex-container" >
     <div *ngFor="let type_category of type_categories.results" class="checkbox_ui">
@@ -32,17 +33,18 @@
     </div>
 
     <div *ngFor="let result of this.pokemon_item_select; let i = index">
-      <p-card>
+      <p-card [style]="this.artService.getPokemonCardType(result.value, result.secValue ?? '')">
         <p-button [outlined]="true" >
           <img [src]="result.label" alt="Image" width="96">
         </p-button>
-        {{result.title}}
-        <div>
-          <p-button class="button-type1-ui"  [disabled]="true"  [label]="result.value"/>
-          <p-button class="button-type2-ui" *ngIf="result.secValue != '' " [disabled]="true" [label]="result.secValue"/>
+        <h4 style="background-color: #e1dad3; border-radius: 20px">{{result.title}}</h4>
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <p-button class="button-type1-ui"  [label]="result.value"/>
+          <p-button *ngIf="result.secValue != '' " [label]="result.secValue"/>
         </div>
         <p-button (onClick)="changeFavorite(result)" class="favorite-button"
-                  [icon]="result.favorite ? 'pi pi-heart-fill' : 'pi pi-heart'" [rounded]="true" [text]="true"/>
+                  [icon]="result.favorite ? 'pi pi-heart-fill' : 'pi pi-heart'"
+                  [rounded]="true" [text]="true"/>
       </p-card>
     </div>
   </div>

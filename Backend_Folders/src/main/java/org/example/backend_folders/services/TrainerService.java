@@ -13,12 +13,17 @@ public class TrainerService {
 
     private final TrainerRepository trainerRepository;
 
+
     public TrainerService(TrainerRepository trainerRepository) {
         this.trainerRepository = trainerRepository;
     }
 
     public List<Trainer> getAllTrainers() {
         return trainerRepository.findAll();
+    }
+
+    public List<Trainer> getAllTrainersExcludeOne(String email) {
+        return trainerRepository.findTrainersByEmailIsNot(email);
     }
 
     public Optional<Trainer> getPersonById(UUID id) {

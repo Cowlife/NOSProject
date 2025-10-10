@@ -1,23 +1,36 @@
+<p-toast/>
 <h3 style="text-align: center;">Register PAGE</h3>
 
 <div style="align-content: center">
-  <p-floatlabel variant="on">
-    <input pInputText id="on_label" [(ngModel)]="name_value" autocomplete="off" />
-    <label for="on_label">Name</label>
-  </p-floatlabel>
-  <p-floatlabel variant="on">
-    <input pInputText id="on_label2" [(ngModel)]="email_value" autocomplete="off" />
-    <label for="on_label2">Email</label>
-  </p-floatlabel>
-  <p-floatlabel variant="on">
-    <p-password [(ngModel)]="password_value" inputId="on_label" [toggleMask]="true"/>
-    <label for="on_label">Password</label>
-  </p-floatlabel>
-  <p-floatlabel variant="on">
-    <p-password [(ngModel)]="confirm_password_value" inputId="on_label" [toggleMask]="true"/>
-    <label for="on_label">Confirm Password</label>
-  </p-floatlabel>
-  <p-button (onClick)="registerToPage()" label="Register" severity="success" />
-  <p-button (onClick)="registerToPage()" label="Back" severity="danger"/>
+  <div style="display: flex; justify-content: center; align-items: center;">
+    <p-floatlabel variant="on">
+      <input pInputText id="on_label" [(ngModel)]="name_value" autocomplete="off" />
+      <label for="on_label">Name</label>
+    </p-floatlabel>
+  </div>
+  <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+    <p-floatlabel variant="on">
+      <input pInputText id="on_label2" [(ngModel)]="email_value" autocomplete="off" />
+      <label for="on_label2">Email</label>
+    </p-floatlabel>
+  </div>
+  <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+    <p-floatlabel variant="on">
+      <p-password [(ngModel)]="password_value" inputId="on_label" [toggleMask]="true"/>
+      <label for="on_label">Password</label>
+    </p-floatlabel>
+  </div>
+  <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+    <p-floatlabel variant="on">
+      <p-password [(ngModel)]="confirm_password_value" inputId="on_label" [toggleMask]="true"/>
+      <label for="on_label">Confirm Password</label>
+    </p-floatlabel>
+  </div>
+  <div style="margin-top: 10px; display: flex; justify-content: center; align-items: center;">
+    <p-button (onClick)="registerToPage()" label="Register" severity="success" />
+    <p-button (onClick)="back()" label="Back" severity="danger"/>
+  </div>
+
+
 
 </div>
