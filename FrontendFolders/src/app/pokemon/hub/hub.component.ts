@@ -13,8 +13,10 @@ import {TableModule} from 'primeng/table';
 import {IconField} from 'primeng/iconfield';
 import {InputIcon} from 'primeng/inputicon';
 import {InputText} from 'primeng/inputtext';
-import {PokemonListComponent} from './pokemon-list/pokemon-list.component';
 import {Toast} from 'primeng/toast';
+import {BattleCenterComponent} from './battle-center/battle-center.component';
+import {PokemonDialogComponent} from './pokemon-dialog/pokemon-dialog.component';
+import {Pokemon} from '../../model/pokemon';
 
 @Component({
   selector: 'app-hub',
@@ -32,7 +34,9 @@ import {Toast} from 'primeng/toast';
     IconField,
     InputIcon,
     InputText,
-    Toast
+    Toast,
+    BattleCenterComponent,
+    PokemonDialogComponent
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './hub.component.html',
@@ -41,12 +45,9 @@ import {Toast} from 'primeng/toast';
 export class HubComponent {
   drawer_visibility: boolean = false;
   dialog_visibility: boolean = false;
-  primaryType: string | undefined;
-  secondaryType: string | undefined;
+
   current_pokemon: Favorite = {} as Favorite;
-  matchModeOptions: SelectItem[] = [];
-  retrieval_cols!: any[];
-  current_extracted_data: any = {}
+  current_extracted_data: Pokemon = {} as Pokemon;
   protected readonly console = console;
 
   constructor(protected pokemonService: PokemonService,
@@ -55,21 +56,9 @@ export class HubComponent {
               protected artService: ArtService){}
 
   ngOnInit(){
-    this.retrieval_cols = [
-      { field: 'name', header: 'Move Name' },
-      { field: 'type', header: 'Move Type' },
-      { field: 'power', header: 'Power' },
-      { field: 'pp', header: 'PP' },
-      { field: 'accuracy', header: 'Accuracy' },
-    ];
-    this.matchModeOptions = [
-      { label: 'Starts With', value: FilterMatchMode.STARTS_WITH },
-      { label: 'Contains', value: FilterMatchMode.CONTAINS},
-      { label: 'Not Contains', value: FilterMatchMode.NOT_CONTAINS},
-      { label: 'Ends With',value: FilterMatchMode.ENDS_WITH},
-      { label: 'Equals',value: FilterMatchMode.EQUALS},
-      { label: 'Not Equals',value: FilterMatchMode.NOT_EQUALS}
-    ];
+    if(Object.keys(this.pokemonService.current_user).length === 0){
+      this.pokemonService.changePage('')
+    }
   }
 
   splitStringByComma(element: string | undefined, number: number): string | undefined{
@@ -84,14 +73,17 @@ export class HubComponent {
   showDialog(current_pokemon: Favorite) {
     this.dialog_visibility = true;
     this.current_pokemon = current_pokemon
-
-    this.pokemonService.getPokemonElement(current_pokemon.favoritePokemonName).subscribe(data => {
+    this.pokemonService.getPokemonElement(current_pokemon.favoritePokemonName).subscribe((data: any) => {
       this.current_extracted_data = data;
-      console.log(this.current_extracted_data)
+
+
     })
 
   }
 
+  hideDialog(event: any){
+    this.dialog_visibility = event;
+  }
 
 
   checkFavorites() {

@@ -34,7 +34,7 @@
 
     <div *ngFor="let result of this.pokemon_item_select; let i = index">
       <p-card [style]="this.artService.getPokemonCardType(result.value, result.secValue ?? '')">
-        <p-button [outlined]="true" >
+        <p-button [outlined]="true" (click)="showDialog(result)">
           <img [src]="result.label" alt="Image" width="96">
         </p-button>
         <h4 style="background-color: #e1dad3; border-radius: 20px">{{result.title}}</h4>
@@ -50,7 +50,13 @@
   </div>
 </div>
 
+<app-pokemon-dialog [current_extracted_data]="current_extracted_data"
+                    [dialog_visibility]="dialog_visibility"
+                    (change_dialog_visibility)="hideDialog($event)"></app-pokemon-dialog>
+
+
 <!--Paginator to restrict retrieval-->
 <div style="margin-top: auto">
   <p-paginator [pageLinkSize]="defaultRecords" (onPageChange)="onPageChange($event)" [first]="0" [rows]="10" [totalRecords]="record_length" [rowsPerPageOptions]="[10, 20, 30]" />
 </div>
+

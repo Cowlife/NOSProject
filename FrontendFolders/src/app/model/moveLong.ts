@@ -4,6 +4,7 @@ import {EffectEntry} from './effectEntry';
 
 export interface MoveLong{
   id: number;
+  name: string;
   accuracy: number;
   damage_class: NamedAPIResource;
   effect_entries: EffectEntry[];

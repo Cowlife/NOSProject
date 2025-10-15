@@ -1,0 +1,78 @@
+<p-dialog
+  (visibleChange)="change_dialog_visibility.emit(false)"
+  header="Pokemon Info"
+  [modal]="true"
+  (onShow)="setMoveTable()"
+  [(visible)]="dialog_visibility"
+  [style]="{ width: '80rem' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+
+  <div class="dialog-flex_container">
+    <div style="flex-grow: 1">
+      <p-card>
+        <img *ngIf="current_extracted_data?.sprites"
+             [src]="this.current_extracted_data.sprites.front_default" alt="Image" width="96">
+        <h4>{{this.current_extracted_data.name}}</h4>
+        <ng-container *ngIf="current_extracted_data?.types">
+          <p-button [disabled]="true"
+                    [label]="current_extracted_data.types[0].type.name"/>
+          <p-button [disabled]="true" *ngIf="current_extracted_data.types[1]?.type"
+                    [label]="current_extracted_data.types[1].type.name"/>
+        </ng-container>
+      </p-card>
+    </div>
+    <div style="max-width: 30%">
+      <ng-container *ngFor="let ind_stat of current_extracted_data.stats">
+        <p-card>{{ind_stat.stat.name}} : {{ind_stat.base_stat}}</p-card>
+      </ng-container>
+    </div>
+    <div class="p-card-image-flex-container" *ngIf="current_extracted_data?.sprites">
+      <h3>Pokemon Sprites</h3>
+      <p-card *ngFor="let image of setSpriteImages()" >
+        <img [src]="image.value" alt="Image" width="96">
+        <h4 style="width: 40%; margin: auto">{{image.label}}</h4>
+      </p-card>
+    </div>
+  </div>
+  <div class="dialog-flex_container">
+    <div style="flex-grow: 1">
+      <div class="card">
+        <p-table #dt
+                 [stripedRows] = "true"
+                 [columns]="retrieval_move_cols"
+                 [value]="current_pokemon_move_list"
+                 [paginator]="true"
+                 [rows]="5"
+                 [rowsPerPageOptions]="[5, 10, 20]"
+                 responsiveLayout="scroll">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns">{{col.header}}</th>
+            </tr>
+            <!--<tr>
+              <th [pSortableColumn]="col.field" *ngFor="let col of columns">
+                <ng-container *ngIf="col.field != ''">
+                  <p-columnFilter
+                    type="text"
+                    [field]="col.field"
+                    [matchModeOptions]="matchModeOptions"
+                    [matchMode]="FilterMatchMode.STARTS_WITH" />
+                  <p-sortIcon [field]="col.field" />
+                </ng-container>
+              </th>
+            </tr>-->
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+              <td *ngFor="let col of columns">
+                <ng-container>
+                  {{returnCellElement(rowData[col.field])}}
+                </ng-container>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</p-dialog>

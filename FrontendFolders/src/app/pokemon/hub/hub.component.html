@@ -21,69 +21,16 @@
       </div>
       <p-button class="favorite-button" (onClick)="deleteElement(fav_pokemon)"
                 icon="pi pi-heart-fill" [rounded]="true" [text]="true"/>
-
     </p-card>
   </div>
 </p-drawer>
 
-<p-dialog
-  header="Pokemon Info"
-  [modal]="true"
-  [(visible)]="dialog_visibility"
-  [style]="{ width: '80rem' }"
-  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
 
-  <div class="dialog-flex_container">
-    <div style="flex-shrink: 2">
-      <p-card>
-        <img [src]="this.current_pokemon.pokemonImage" alt="Image" width="96">
-        <h4>{{this.current_pokemon.favoritePokemonName}}</h4>
-        <p-button [disabled]="true"
-                  [label]="splitStringByComma(this.current_pokemon.pokemonTypes, 0)"/>
-        <p-button [disabled]="true" *ngIf="splitStringByComma(this.current_pokemon.pokemonTypes, 1) != null "
-                  [label]="splitStringByComma(this.current_pokemon.pokemonTypes, 1)"/>
-      </p-card>
-    </div>
-    <div  style="flex-grow: 1">
-      <ng-container *ngFor="let ind_stat of current_extracted_data.stats">
-        <p-card>{{ind_stat.stat.name}} : {{ind_stat.base_stat}}</p-card>
-      </ng-container>
-    </div>
-    <div style="flex-grow: 1">
-      <ng-container *ngFor="let ind_stat of current_extracted_data.stats">
-        <p-card>
-          <img [src]="current_extracted_data.sprites.back_default" alt="Image" width="96">
-        </p-card>
-        <p-card *ngIf="current_extracted_data.sprites.back_female != null">
-          <img [src]="current_extracted_data.sprites.back_female " alt="Image" width="96">
-        </p-card>
-        <p-card>
-          <img [src]="current_extracted_data.sprites.back_shiny " alt="Image" width="96">
-        </p-card>
-        <p-card *ngIf="current_extracted_data.sprites.back_shiny_female != null">
-          <img [src]="current_extracted_data.sprites.back_shiny_female " alt="Image" width="96">
-        </p-card>
-        <p-card>
-          <img [src]="current_extracted_data.sprites.front_default" alt="Image" width="96">
-        </p-card>
-        <p-card *ngIf="current_extracted_data.sprites.front_female != null">
-          <img [src]="current_extracted_data.sprites.front_female" alt="Image" width="96">
-        </p-card>
-        <p-card>
-          <img [src]="current_extracted_data.sprites.front_shiny" alt="Image" width="96">
-        </p-card>
-        <p-card *ngIf="current_extracted_data.sprites.front_shiny_female != null">
-          <img [src]="current_extracted_data.sprites.front_shiny_female" alt="Image" width="96">
-        </p-card>
-      </ng-container>
-    </div>
-  </div>
-  <div class="dialog-flex_container">
-    <div style="flex-grow: 1">
-      4
-    </div>
-  </div>
-</p-dialog>
+<app-pokemon-dialog [current_extracted_data]="current_extracted_data"
+                    [dialog_visibility]="dialog_visibility"
+                    (change_dialog_visibility)="hideDialog($event)"
+                      ></app-pokemon-dialog>
+
 
 <router-outlet/>
 

@@ -38,4 +38,7 @@ public class Pokemon {
     @OneToMany
     private List<MoveShort> moves;
 
+    @OneToMany
+    private List<MoveLong> moveLongList;
+
 }

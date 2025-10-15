@@ -33,6 +33,9 @@ import {Dialog} from 'primeng/dialog';
 import {Drawer} from 'primeng/drawer';
 import {Favorite} from '../../../model/favorite';
 import {ArtService} from '../../art.service';
+import {PokemonDialogComponent} from '../pokemon-dialog/pokemon-dialog.component';
+import {HubComponent} from '../hub.component';
+import {MoveLong} from '../../../model/moveLong';
 
 
 
@@ -61,9 +64,10 @@ import {ArtService} from '../../art.service';
     ConfirmDialog,
     Dialog,
     Drawer,
-    ButtonDirective
+    ButtonDirective,
+    PokemonDialogComponent
   ],
-  providers: [MessageService],
+  providers: [MessageService, HubComponent],
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.css']
 })
@@ -85,6 +89,8 @@ export class PokemonListComponent {
   ordered_array: any[] = [];
 
   pokemon_item_select: PokeSelectItem[] = []
+  current_extracted_data: Pokemon = {} as Pokemon;
+  dialog_visibility: boolean = false;
 
   type_categories: any = [] as NamedAPIResource[];
   selected_type_categories: any[] = [];
@@ -101,7 +107,8 @@ export class PokemonListComponent {
   constructor(protected pokemonService: PokemonService,
               private filterService: FilterService,
               protected messageService: MessageService,
-              protected artService: ArtService) {
+              protected artService: ArtService,
+              protected hubComponent: HubComponent) {
     this.items = [
       {
         label: "Equals",
@@ -144,6 +151,10 @@ export class PokemonListComponent {
         { label: 'Equals',value: FilterMatchMode.EQUALS},
         { label: 'Not Equals',value: FilterMatchMode.NOT_EQUALS}
       ];
+
+      this.pokemonService.getAllMoves().subscribe((result: any) => {
+        this.pokemonService.pokemon_moves_repo = result;
+      })
 
       this.pokemonService.getFavoritesByEmail().subscribe((value: any) => {
         this.pokemonService.favorite_pokemon = value
@@ -322,7 +333,9 @@ export class PokemonListComponent {
 
   }
 
-  // TODO:
+
+
+
 
   orderValues() {
     this.ordered_array = []
@@ -379,6 +392,19 @@ export class PokemonListComponent {
       this.pokemonService.deleteFavoriteElement(favorite_element, this.messageService)
     : this.pokemonService.createFavoriteElement(favorite_element, this.messageService)
     pokemon.favorite = !pokemon.favorite;
+  }
+
+  showDialog(result: PokeSelectItem) {
+    this.dialog_visibility = true;
+    this.pokemonService.getPokemonElement(result.title ?? '').subscribe((data: any) => {
+      this.current_extracted_data = data;
+    })
+  }
+
+  hideDialog(event: any){
+    this.dialog_visibility = event;
+    console.log("Extracted data: ")
+    console.dir(this.current_extracted_data)
   }
 
 }

@@ -1,0 +1,40 @@
+
+.dialog-flex_container{
+  display: flex;
+  align-items: stretch;
+  background-color: #f1f1f1;
+  flex-wrap: wrap;
+}
+
+.dialog-flex_container > div {
+  background-color: DodgerBlue;
+  color: white;
+  margin: 10px;
+  text-align: center;
+}
+
+.p-card-image-flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex-grow: 1;
+  justify-content: center;
+  max-width: 60%;
+}
+
+.p-card-image-flex-container > h3 {
+  width: 100%;
+  text-align: center;
+}
+
+.p-card-image-flex-container > p-card {
+  width: 20%;
+  text-align: center;
+  --p-card-body-padding: 0 !important;
+}
+
+@media only screen and (max-width: 1198px) {
+  .p-card-image-flex-container {
+    max-width: 100%;
+  }
+}

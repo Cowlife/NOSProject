@@ -5,6 +5,7 @@ import {Trainer} from '../model/trainer';
 import {Favorite} from '../model/favorite';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {Pokemon} from '../model/pokemon';
+import {MoveLong} from '../model/moveLong';
 
 
 @Injectable({
@@ -24,8 +25,11 @@ export class PokemonService {
   alertString: string = "";
   favorite_pokemon: Favorite[] = []
   post_data: any = {};
+  pokemon_moves_repo: MoveLong[] = []
+
   constructor(private router: Router,
               private httpClient: HttpClient) { }
+
 
   getAllPokemon(){
     return this.httpClient.get(this._apiURL + "/api/pokemon")
@@ -41,6 +45,10 @@ export class PokemonService {
 
   getAllPokemonByType(type_name: string){
     return this.httpClient.get(this._apiURL + "/api/pokemon/type/" + type_name)
+  }
+
+  getAllMoves(){
+    return this.httpClient.get(this._apiURL + "/api/pokemon/moves")
   }
 
   getFavoritesByEmail(){

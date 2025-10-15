@@ -47,7 +47,9 @@ p-image{
   align-items: center;
 }
 
-
+.p-card_width{
+  width: 40%;
+}
 
 
 .button-type1-ui{

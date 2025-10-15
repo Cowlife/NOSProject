@@ -11,8 +11,6 @@ import java.util.UUID;
 public interface FavoriteRepository extends JpaRepository<Favorite, UUID> {
     List<Favorite> findAllByTrainerEmail(String email);
 
-    boolean existsByFavoritePokemonNameAndTrainerEmail(String name, String email);
-
     Favorite findFirstByTrainerEmailAndFavoritePokemonName(String email, String name);
 
     void deleteAllByTrainerEmailAndFavoritePokemonName(String email, String name);

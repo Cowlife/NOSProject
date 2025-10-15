@@ -5,6 +5,7 @@ import org.example.backend_folders.pokemonEntities.*;
 import org.example.backend_folders.services.PokemonService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,14 +36,21 @@ public class PokemonController {
         return pokemonService.getAllTypes();
     }
 
+    @GetMapping("/moves")
+    public List<MoveLong> getAllMoves(){
+        return pokemonService.getAllMoves();
+    }
+
     @GetMapping("/type/{type}")
     public AllPokemonTypeRef getAllPokemonByType(@PathVariable String type){
         return pokemonService.getAllPokemonByType(type);
     }
 
-    @GetMapping("/moves/{name}")
+    @GetMapping("/move/{name}")
     public MoveLong getPokemonMoveInfo(@PathVariable String name){
         return pokemonService.getMoveInfo(name);
     }
+
+
 
 }

@@ -5,7 +5,6 @@ import org.example.backend_folders.pokemonEntities.Pokemon;
 import org.example.backend_folders.pokemonEntities.PokemonType;
 import org.example.backend_folders.remainderEntities.Favorite;
 import org.example.backend_folders.repositories.FavoriteRepository;
-import org.example.backend_folders.repositories.PokeVariableDescRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -63,4 +62,7 @@ public class FavoriteService {
     public Favorite findFavoriteWithNameAndEmail(String email, String name){
         return this.favoriteRepository.findFirstByTrainerEmailAndFavoritePokemonName(email, name);
     }
+
+
+
 }
