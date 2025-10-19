@@ -52,7 +52,9 @@
 
 <app-pokemon-dialog [current_extracted_data]="current_extracted_data"
                     [dialog_visibility]="dialog_visibility"
-                    (change_dialog_visibility)="hideDialog($event)"></app-pokemon-dialog>
+                    (change_dialog_visibility)="hideDialog($event)"
+                    [chart_data_options]="this.current_chart_data_options"
+></app-pokemon-dialog>
 
 
 <!--Paginator to restrict retrieval-->

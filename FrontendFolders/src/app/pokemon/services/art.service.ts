@@ -7,7 +7,6 @@ export class ArtService {
 
   constructor() { }
 
-
   getPokemonCardType(type1: string, type2: string) {
     const gradient_map: Record<string, string>  = {
       normal: "rgba(125, 155, 171, 1) 50%", // Done
@@ -38,4 +37,55 @@ export class ArtService {
       background: final_gradient_result,
     };
   }
+
+  createChart(labels: string[], values: number[], title: string){
+    const data: any = {
+      labels: labels,
+      datasets: [
+        {
+          label: title,
+          backgroundColor: '#357222',
+          data: values
+        },
+      ]
+    };
+
+    const options: any = {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      aspectRatio: 0.8,
+      plugins: {
+        legend: {
+          labels: {
+            color: '#cc2525'
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#ffffff',
+            font: {
+              weight: 500
+            }
+          },
+          grid: {
+            color: '#2f0080',
+            drawBorder: false
+          }
+        },
+        y: {
+          ticks: {
+            color: '#ffffff'
+          },
+          grid: {
+            color: '#2f0080',
+            drawBorder: false
+          }
+        }
+      }
+    };
+    return [data, options];
+  }
+
 }

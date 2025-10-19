@@ -5,7 +5,7 @@
   <p-button label="Logout" severity="contrast" (onClick)="this.pokemonService.changePage('')" />
 </div>
 
-<p-drawer [(visible)]="drawer_visibility" [modal]="true" (onHide)="checkFavorites()">
+<p-drawer [(visible)]="drawer_visibility" [modal]="true">
   <h3 style="text-align: center">Favorite Pokemon List</h3>
   <div *ngFor="let fav_pokemon of this.pokemonService.favorite_pokemon">
     <p-card>
@@ -29,7 +29,8 @@
 <app-pokemon-dialog [current_extracted_data]="current_extracted_data"
                     [dialog_visibility]="dialog_visibility"
                     (change_dialog_visibility)="hideDialog($event)"
-                      ></app-pokemon-dialog>
+                    [chart_data_options]="this.current_chart_data_options"
+></app-pokemon-dialog>
 
 
 <router-outlet/>

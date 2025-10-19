@@ -1,14 +1,14 @@
 import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {Button, ButtonDirective} from 'primeng/button';
-import {PokemonService} from '../pokemon.service';
+import {PokemonService} from '../services/pokemon.service';
 import {Drawer} from 'primeng/drawer';
 import {NgForOf, NgIf} from '@angular/common';
 import {Card} from 'primeng/card';
 import {ConfirmationService, FilterMatchMode, MessageService, SelectItem} from 'primeng/api';
 import {Favorite} from '../../model/favorite';
 import {Dialog} from 'primeng/dialog';
-import {ArtService} from '../art.service';
+import {ArtService} from '../services/art.service';
 import {TableModule} from 'primeng/table';
 import {IconField} from 'primeng/iconfield';
 import {InputIcon} from 'primeng/inputicon';
@@ -17,6 +17,8 @@ import {Toast} from 'primeng/toast';
 import {BattleCenterComponent} from './battle-center/battle-center.component';
 import {PokemonDialogComponent} from './pokemon-dialog/pokemon-dialog.component';
 import {Pokemon} from '../../model/pokemon';
+import {BaseStat} from '../../model/baseStat';
+import {basename} from '@angular/compiler-cli';
 
 @Component({
   selector: 'app-hub',
@@ -48,6 +50,7 @@ export class HubComponent {
 
   current_pokemon: Favorite = {} as Favorite;
   current_extracted_data: Pokemon = {} as Pokemon;
+  current_chart_data_options: any[] = [];
   protected readonly console = console;
 
   constructor(protected pokemonService: PokemonService,
@@ -75,7 +78,16 @@ export class HubComponent {
     this.current_pokemon = current_pokemon
     this.pokemonService.getPokemonElement(current_pokemon.favoritePokemonName).subscribe((data: any) => {
       this.current_extracted_data = data;
-
+      let chart_values: number[] = [];
+      let chart_labels: string[] = [];
+      this.current_extracted_data.stats.forEach((baseStat: BaseStat) => {
+          chart_values.push(baseStat.base_stat)
+          chart_labels.push(baseStat.stat.name)
+        }
+      )
+      this.current_chart_data_options = this.artService.createChart(
+        chart_labels,chart_values,"Pokemon Stats"
+      )
 
     })
 
@@ -83,10 +95,7 @@ export class HubComponent {
 
   hideDialog(event: any){
     this.dialog_visibility = event;
+    console.log("works")
   }
 
-
-  checkFavorites() {
-
-  }
 }

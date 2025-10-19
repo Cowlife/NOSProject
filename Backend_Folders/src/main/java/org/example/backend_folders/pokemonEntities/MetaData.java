@@ -1,6 +1,5 @@
 package org.example.backend_folders.pokemonEntities;
 
-import com.fasterxml.jackson.databind.util.Named;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

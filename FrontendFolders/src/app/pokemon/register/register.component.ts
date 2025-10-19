@@ -6,10 +6,10 @@ import {Password} from 'primeng/password';
 import {Button} from 'primeng/button';
 import {InputText} from 'primeng/inputtext';
 import {Trainer} from '../../model/trainer';
-import {PokemonService} from '../pokemon.service';
+import {PokemonService} from '../services/pokemon.service';
 import {catchError} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {SecurityService} from '../security.service';
+import {SecurityService} from '../services/security.service';
 import {MessageService} from 'primeng/api';
 import {Toast} from 'primeng/toast';
 

@@ -4,7 +4,7 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {Password} from 'primeng/password';
 import {Button} from 'primeng/button';
-import {PokemonService} from '../pokemon.service';
+import {PokemonService} from '../services/pokemon.service';
 import {HttpClient} from '@angular/common/http';
 import {Trainer} from '../../model/trainer';
 import {Toast} from 'primeng/toast';

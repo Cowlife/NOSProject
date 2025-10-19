@@ -3,7 +3,7 @@ import {TableModule} from 'primeng/table';
 import {FilterMatchMode, FilterService, MessageService, SelectItem} from 'primeng/api';
 import {NgForOf, NgIf} from '@angular/common';
 import {Trainer} from '../../../model/trainer';
-import {PokemonService} from '../../pokemon.service';
+import {PokemonService} from '../../services/pokemon.service';
 import {Button} from 'primeng/button';
 import {Dialog} from 'primeng/dialog';
 import {Card} from 'primeng/card';

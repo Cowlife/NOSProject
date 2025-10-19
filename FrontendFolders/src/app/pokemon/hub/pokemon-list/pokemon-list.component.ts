@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {Pokedex} from '../../../model/pokedex';
-import {PokemonService} from '../../pokemon.service';
+import {PokemonService} from '../../services/pokemon.service';
 import {Card} from 'primeng/card';
 import {Button, ButtonDirective} from 'primeng/button';
 import {
@@ -32,10 +32,11 @@ import {ConfirmDialog} from 'primeng/confirmdialog';
 import {Dialog} from 'primeng/dialog';
 import {Drawer} from 'primeng/drawer';
 import {Favorite} from '../../../model/favorite';
-import {ArtService} from '../../art.service';
+import {ArtService} from '../../services/art.service';
 import {PokemonDialogComponent} from '../pokemon-dialog/pokemon-dialog.component';
 import {HubComponent} from '../hub.component';
 import {MoveLong} from '../../../model/moveLong';
+import {BaseStat} from '../../../model/baseStat';
 
 
 
@@ -90,11 +91,13 @@ export class PokemonListComponent {
 
   pokemon_item_select: PokeSelectItem[] = []
   current_extracted_data: Pokemon = {} as Pokemon;
+  current_chart_data_options: any[] = [];
+
   dialog_visibility: boolean = false;
 
   type_categories: any = [] as NamedAPIResource[];
   selected_type_categories: any[] = [];
-  matchModeOptions: SelectItem[] = [];
+
   search_value: string = '';
   items: MenuItem[] = [];
 
@@ -102,6 +105,7 @@ export class PokemonListComponent {
   orderIconIndex: number = 0;
   orderArray = ['pi pi-sort-alt-slash', 'pi pi-sort-alpha-down', 'pi pi-sort-alpha-up-alt']
   private order_function: Record<number, any> = {};
+
 
 
   constructor(protected pokemonService: PokemonService,
@@ -143,14 +147,7 @@ export class PokemonListComponent {
       this.pokemon_list = data;
       this.record_length = this.pokemon_list.results.length;
       this.messageService.add({ severity: 'success', summary: 'SUCCESS', detail: 'Account entered successfully', life: 3000 });
-      this.matchModeOptions = [
-        { label: 'Starts With', value: FilterMatchMode.STARTS_WITH },
-        { label: 'Contains', value: FilterMatchMode.CONTAINS},
-        { label: 'Not Contains', value: FilterMatchMode.NOT_CONTAINS},
-        { label: 'Ends With',value: FilterMatchMode.ENDS_WITH},
-        { label: 'Equals',value: FilterMatchMode.EQUALS},
-        { label: 'Not Equals',value: FilterMatchMode.NOT_EQUALS}
-      ];
+
 
       this.pokemonService.getAllMoves().subscribe((result: any) => {
         this.pokemonService.pokemon_moves_repo = result;
@@ -398,6 +395,16 @@ export class PokemonListComponent {
     this.dialog_visibility = true;
     this.pokemonService.getPokemonElement(result.title ?? '').subscribe((data: any) => {
       this.current_extracted_data = data;
+      let chart_values: number[] = [];
+      let chart_labels: string[] = [];
+      this.current_extracted_data.stats.forEach((baseStat: BaseStat) => {
+          chart_values.push(baseStat.base_stat)
+          chart_labels.push(baseStat.stat.name)
+        }
+      )
+      this.current_chart_data_options = this.artService.createChart(
+        chart_labels,chart_values,"Pokemon Stats"
+      )
     })
   }
 

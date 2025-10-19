@@ -3,16 +3,13 @@ import {Button} from "primeng/button";
 import {Card} from "primeng/card";
 import {Dialog} from "primeng/dialog";
 import {NgForOf, NgIf} from "@angular/common";
-import {Favorite} from '../../../model/favorite';
 import {ConfirmationService, FilterMatchMode, MessageService, PrimeTemplate, SelectItem} from 'primeng/api';
-import {PokemonService} from '../../pokemon.service';
-import {ArtService} from '../../art.service';
+import {PokemonService} from '../../services/pokemon.service';
 import {Pokemon} from '../../../model/pokemon';
 import {TableModule} from 'primeng/table';
-import {Trainer} from '../../../model/trainer';
-import {MoveShort} from '../../../model/moveShort';
-import {MoveLong} from '../../../model/moveLong';
-import {MetaData} from '../../../model/metaData';
+import {FaIconComponent} from '@fortawesome/angular-fontawesome';
+import {PokemonTypesRepo} from '../../pokemon_types_repo';
+import {UIChart} from 'primeng/chart';
 
 @Component({
   selector: 'app-pokemon-dialog',
@@ -24,7 +21,9 @@ import {MetaData} from '../../../model/metaData';
     NgForOf,
     NgIf,
     PrimeTemplate,
-    TableModule
+    TableModule,
+    FaIconComponent,
+    UIChart
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './pokemon-dialog.component.html',
@@ -32,33 +31,75 @@ import {MetaData} from '../../../model/metaData';
 })
 export class PokemonDialogComponent {
   @Input() dialog_visibility: boolean = false;
-  matchModeOptions: SelectItem[] = [];
   @Input() retrieval_move_cols: any[] = [];
   @Input() current_extracted_data: Pokemon = {} as Pokemon
+  @Input() chart_data_options: any[] = [];
+
+
+  data: any;
+  options: any;
+
   @Output() change_dialog_visibility = new EventEmitter<boolean>();
   protected readonly console = console;
   protected readonly FilterMatchMode = FilterMatchMode;
-  moves: MoveLong[] = [];
-  cols: any[] = [];
+  ref_set: Set<string> = new Set<string>()
   current_pokemon_move_list: any[] = [];
 
+
+
   constructor(protected pokemonService: PokemonService,
-              protected messageService: MessageService,
-              protected confirmationService: ConfirmationService,
-              protected artService: ArtService){}
+              protected pokemonTypes: PokemonTypesRepo){}
 
   ngOnInit(){
-    this.matchModeOptions = [
-      { label: 'Starts With', value: FilterMatchMode.STARTS_WITH },
-      { label: 'Contains', value: FilterMatchMode.CONTAINS},
-      { label: 'Not Contains', value: FilterMatchMode.NOT_CONTAINS},
-      { label: 'Ends With',value: FilterMatchMode.ENDS_WITH},
-      { label: 'Equals',value: FilterMatchMode.EQUALS},
-      { label: 'Not Equals',value: FilterMatchMode.NOT_EQUALS}
-    ];
 
+    this.data = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+      datasets: [
+        {
+          label: 'Value of Stat',
+          backgroundColor: '#357222',
+          data: [65, 59, 80, 81, 56, 55]
+        },
+      ]
+    };
 
+    this.options = {
+      indexAxis: 'y',
+      maintainAspectRatio: false,
+      aspectRatio: 0.8,
+      plugins: {
+        legend: {
+          labels: {
+            color: '#cc2525'
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#ffffff',
+            font: {
+              weight: 500
+            }
+          },
+          grid: {
+            color: '#2f0080',
+            drawBorder: false
+          }
+        },
+        y: {
+          ticks: {
+            color: '#ffffff'
+          },
+          grid: {
+            color: '#2f0080',
+            drawBorder: false
+          }
+        }
+      }
+    };
   }
+
 
   setSpriteImages(){
     let spriteImageRepo: SelectItem[] = [];
@@ -73,10 +114,15 @@ export class PokemonDialogComponent {
     return spriteImageRepo
   }
 
-  setSpriteImageLabel(key: string){
+  setSpriteImageLabel(key: string, remove_hifen: boolean = false){
     // Capitalizing all letters
-    let words = key.replace(/_/g," ").split(" ")
-
+    let words: string[];
+    if (remove_hifen){
+      words = key.replace(/-/g," ").split(" ")
+    }
+    else{
+      words = key.replace(/_/g," ").split(" ")
+    }
     const result = words.map((word) => {
       return word[0].toUpperCase() + word.substring(1);
     }).join(" ");
@@ -94,11 +140,7 @@ export class PokemonDialogComponent {
     for (let key in moveLongElements) {
       switch(key) {
         case 'id': {break}
-        case 'meta': {
-          const meta = moveLongElements[key];
-          this.setMetaColumns(meta)
-          break
-        }
+        case 'meta': {break}
         default: {
           this.retrieval_move_cols.push({
             field: key,
@@ -118,30 +160,33 @@ export class PokemonDialogComponent {
 
   }
 
-  setMetaColumns(meta: MetaData){
-    for (let inside_key in meta){
-      if (['ailment','category','crit_rate'].includes(inside_key)){
-        this.retrieval_move_cols.push({
-          field: inside_key,
-          header: this.setSpriteImageLabel(inside_key),
-        })
-      }
+  returnFilter(col: any){
+    if (['damage_class','target','type'].includes(col.field)){
+      return col.field.name
+    }
+    else if(col.field == 'effect_entries'){
+      return col.field[0].short_effect
+    }
+    else{
+      return col.field
     }
   }
 
-  returnCellElement(element: any): any {
-    if (element == null){
-      return "--"
-    }
-    else if(Array.isArray(element)){
+  returnNonIconCellElement(rowData: any, col: any): any {
+    const element = rowData[col.field]
+    if(Array.isArray(element)){
       return element[0].short_effect //Use effect later
     }
     else if(element instanceof Object){
       return element.name
     }
+    else if (element == null){
+      return "--"
+    }
     else{
       return element
     }
-
   }
+
+
 }

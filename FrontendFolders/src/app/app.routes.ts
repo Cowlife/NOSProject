@@ -5,7 +5,7 @@ import {CommonModule} from '@angular/common';
 export const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./pokemon/pokemon.module').then(m => m.PokemonModule),
+    loadChildren: () => import('./pokemon/services/pokemon.module').then(m => m.PokemonModule),
   }
 ];
 

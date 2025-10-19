@@ -21,11 +21,6 @@
         </ng-container>
       </p-card>
     </div>
-    <div style="max-width: 30%">
-      <ng-container *ngFor="let ind_stat of current_extracted_data.stats">
-        <p-card>{{ind_stat.stat.name}} : {{ind_stat.base_stat}}</p-card>
-      </ng-container>
-    </div>
     <div class="p-card-image-flex-container" *ngIf="current_extracted_data?.sprites">
       <h3>Pokemon Sprites</h3>
       <p-card *ngFor="let image of setSpriteImages()" >
@@ -36,7 +31,8 @@
   </div>
   <div class="dialog-flex_container">
     <div style="flex-grow: 1">
-      <div class="card">
+      <h3>Pokemon Moves</h3>
+      <div class="card" style="padding: 10px">
         <p-table #dt
                  [stripedRows] = "true"
                  [columns]="retrieval_move_cols"
@@ -51,28 +47,42 @@
             </tr>
             <!--<tr>
               <th [pSortableColumn]="col.field" *ngFor="let col of columns">
-                <ng-container *ngIf="col.field != ''">
                   <p-columnFilter
                     type="text"
                     [field]="col.field"
-                    [matchModeOptions]="matchModeOptions"
+                    [matchModeOptions]="this.pokemonTypes.matchModeOptions"
                     [matchMode]="FilterMatchMode.STARTS_WITH" />
                   <p-sortIcon [field]="col.field" />
-                </ng-container>
               </th>
             </tr>-->
           </ng-template>
           <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
-              <td *ngFor="let col of columns">
-                <ng-container>
-                  {{returnCellElement(rowData[col.field])}}
+              <td *ngFor="let col of columns; let i = index">
+                <ng-container *ngIf="['name','type'].includes(col.field)">
+                  {{setSpriteImageLabel(returnNonIconCellElement(rowData, col), true)}}
+                </ng-container>
+                <ng-container *ngIf="['damage_class','target'].includes(col.field)">
+                  <fa-icon
+                    [icon]="this.pokemonTypes.faAttackTypeMap[rowData[col.field].name]"
+                    style="font-size: 26px">
+                  </fa-icon>
+                </ng-container>
+                <ng-container *ngIf="!(['name','type','damage_class','target'].includes(col.field))">
+                  {{returnNonIconCellElement(rowData, col)}}
                 </ng-container>
               </td>
             </tr>
           </ng-template>
         </p-table>
       </div>
+    </div>
+  </div>
+  <div class="dialog-flex_container">
+    <div style="flex-grow: 1; background-color: #96e072 !important;">
+      <h3>Pokemon Base Stats</h3>
+      <p-chart type="bar" [data]="chart_data_options[0]"
+               [options]="chart_data_options[1]" class="h-[30rem]" />
     </div>
   </div>
 </p-dialog>

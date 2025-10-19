@@ -1,21 +1,13 @@
 package org.example.backend_folders.controllers;
 
 import jakarta.transaction.Transactional;
-import org.apache.catalina.connector.Response;
-import org.example.backend_folders.pokemonEntities.AllPokemonTypeRef;
-import org.example.backend_folders.pokemonEntities.NamedAPIResource;
-import org.example.backend_folders.pokemonEntities.Pokedex;
-import org.example.backend_folders.pokemonEntities.Pokemon;
 import org.example.backend_folders.remainderEntities.Favorite;
 import org.example.backend_folders.services.FavoriteService;
-import org.example.backend_folders.services.PokemonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController

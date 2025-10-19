@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
-import {Trainer} from '../model/trainer';
-import {Favorite} from '../model/favorite';
+import {Trainer} from '../../model/trainer';
+import {Favorite} from '../../model/favorite';
 import {ConfirmationService, MessageService} from 'primeng/api';
-import {Pokemon} from '../model/pokemon';
-import {MoveLong} from '../model/moveLong';
+import {Pokemon} from '../../model/pokemon';
+import {MoveLong} from '../../model/moveLong';
 
 
 @Injectable({
