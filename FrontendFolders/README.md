@@ -37,4 +37,9 @@ Ran the following sequuence of commands to install version 18 of PrimeNG and UUI
 * `ng add @fortawesome/angular-fontawesome`;
 * `npm i --save @fortawesome/free-solid-svg-icons`;
 * `npm install chart.js --save`;
+* `Set-ExecutionPolicy -Scope CurrentUser Unrestricted` for Powershell if using VSCODE;
+* `npm install --save @nestjs/typeorm typeorm pg`;
+* `npm i --save class-validator class-transformer`;
+* `npm i --save @nestjs/microservices`;
+* ``;
 
