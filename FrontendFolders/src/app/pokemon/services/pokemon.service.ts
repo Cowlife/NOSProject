@@ -20,7 +20,7 @@ export class PokemonService {
     return this._apiURL;
   }
 
-  private _apiURL = "http://localhost:8080"
+  private _apiURL = "http://localhost:3000" //3000 for nestJS; 8080 for Spring Boot
   private _current_user = {} as Trainer
   alertString: string = "";
   favorite_pokemon: Favorite[] = []

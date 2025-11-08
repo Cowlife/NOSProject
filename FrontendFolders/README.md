@@ -41,5 +41,10 @@ Ran the following sequuence of commands to install version 18 of PrimeNG and UUI
 * `npm install --save @nestjs/typeorm typeorm pg`;
 * `npm i --save class-validator class-transformer`;
 * `npm i --save @nestjs/microservices`;
+* `npm i --save @nestjs/axios axios`;
+* `npm install rxjs`;
+* `npm i @nestjs/cache-manager cache-manager`;
+* `npm install cache-manager-redis-store`;
+* `npm install class-transformer --save`;
+* `npm install reflect-metadata --save`;
 * ``;
-
